@@ -1,0 +1,8 @@
+start cmd /k "mongod"
+start cmd /k "cd /d d:\Yash\Coding\Java\PatientDetails\src\patientdetails && javac NewPatientServer.java && java NewPatientServer"
+start cmd /k "cd /d d:\Yash\Coding\Java\PatientDetails\src\patientdetails && javac DiagnosisInformationTabelServer.java && java DiagnosisInformationTabelServer"
+start cmd /k "cd /d d:\Yash\Coding\Java\PatientDetails\src\patientdetails && javac DiagnosisInformationTabelSearchServer.java && java DiagnosisInformationTabelSearchServer"
+start cmd /k "cd /d d:\Yash\Coding\Java\PatientDetails\src\patientdetails && javac NewDiagnosisInformationServer.java && java NewDiagnosisInformationServer"
+start cmd /k "cd /d d:\Yash\Coding\Java\PatientDetails\src\patientdetails && javac HistoryOfPatientServer.java && java HistoryOfPatientServer"
+start cmd /k "cd /d d:\Yash\Coding\Java\PatientDetails\src\patientdetails && javac HistoryOfPatientTableServer.java && java HistoryOfPatientTableServer"
+start cmd /k "cd /d d:\Yash\Coding\Java\PatientDetails\src\patientdetails && javac UpdatePatientRecordServer.java && java UpdatePatientRecordServer"

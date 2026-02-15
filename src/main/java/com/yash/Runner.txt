@@ -1,0 +1,19 @@
+ cd "d:\Yash\Coding\Java\PatientDetails\src\patientdetails\" ; if ($?) { javac NewPatientServer.java } ; if ($?) { java NewPatientServer }    
+ 
+
+ cd "d:\Yash\Coding\Java\PatientDetails\src\patientdetails\" ; if ($?) { javac DiagnosisInformationTabelServer.java } ; if ($?) { java DiagnosisInformationTabelServer }  
+ 
+
+ cd "d:\Yash\Coding\Java\PatientDetails\src\patientdetails\" ; if ($?) { javac DiagnosisInformationTabelSearchServer.java } ; if ($?) { java DiagnosisInformationTabelSearchServer }
+
+
+ cd "d:\Yash\Coding\Java\PatientDetails\src\patientdetails\" ; if ($?) { javac NewDiagnosisInformationServer.java } ; if ($?) { java NewDiagnosisInformationServer }      
+
+
+ cd "d:\Yash\Coding\Java\PatientDetails\src\patientdetails\" ; if ($?) { javac HistoryOfPatientServer.java } ; if ($?) { java HistoryOfPatientServer }                     
+
+
+cd "d:\Yash\Coding\Java\PatientDetails\src\patientdetails\" ; if ($?) { javac HistoryOfPatientTableServer.java } ; if ($?) { java HistoryOfPatientTableServer }                  
+
+
+cd "d:\Yash\Coding\Java\PatientDetails\src\patientdetails\" ; if ($?) { javac UpdatePatientRecordServer.java } ; if ($?) { java UpdatePatientRecordServer }                                           
