@@ -80,6 +80,22 @@ public class Home extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Patient Detaile Mangement Sysytem");
+        java.net.URL logoURL = getClass().getResource("/logo.png");
+
+        if (logoURL != null) {
+
+            ImageIcon icon = new ImageIcon(logoURL);
+
+            java.util.List<Image> icons = new java.util.ArrayList<>();
+
+            icons.add(icon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
+            icons.add(icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH));
+            icons.add(icon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH));
+            icons.add(icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH));
+
+            setIconImages(icons);
+        }
+
         loginPagePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
         loginPagePanel.setMinimumSize(new Dimension(560, 500));
         loginPagePanel.setLayout(null);
@@ -272,9 +288,10 @@ public class Home extends JFrame {
                 addressTextArea_Data = addressTextArea.getText();
                 majorDiseaseTextArea_Data = majorDiseaseTextArea.getText();
                 try {
-                    Socket soc = new Socket("192.168.137.1", 2001);
+                    Socket soc = new Socket("192.168.137.1", 5000);
                     BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
                     PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+                    out.println("NEW_PATIENT");
                     out.println(nameTextField_Data);
                     out.println(contactNumberTextField_Data);
                     out.println(ageTextField_Data);
@@ -361,10 +378,10 @@ public class Home extends JFrame {
         DiagnosisInformationDefaultTableModel = new DefaultTableModel(data, columnNames);
 
         try {
-            Socket soc = new Socket("192.168.137.1", 1984);
+            Socket soc = new Socket("192.168.137.1", 5000);
             BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
             PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-
+            out.println("SEARCH_PATIENT");
             String line;
             while (!(line = in.readLine()).equals("null")) {
                 System.out.println(line);
@@ -382,9 +399,10 @@ public class Home extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 String patientIDTextField_Data = patientIDTextField.getText();
                 try {
-                    Socket soc = new Socket("192.168.137.1", 2011);
+                    Socket soc = new Socket("192.168.137.1", 5000);
                     BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
                     PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+                    out.println("SEARCH_PATIENT");
 
                     int i = DiagnosisInformationDefaultTableModel.getRowCount();
                     for (int j = 0; j < i; j++) {
@@ -481,9 +499,10 @@ public class Home extends JFrame {
                     wardRequiredButtonGroup_Data = wardRequiredNoRadioButton.getText();
                 }
                 try {
-                    Socket soc = new Socket("192.168.137.1", 1939);
+                    Socket soc = new Socket("192.168.137.1", 5000);
                     BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
                     PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+                    out.println("NEW_DIAGNOSIS");
                     out.println(patientIDTextField_Data);
                     out.println(symptomsTextField_Data);
                     out.println(diagnosisTextField_Data);
@@ -523,9 +542,10 @@ public class Home extends JFrame {
 
         historyOfPatientDefaultTableModel = new DefaultTableModel(historyOfPatientData, historyOfPatientColumnNames);
         try {
-            Socket soc = new Socket("192.168.137.1", 2008);
+            Socket soc = new Socket("192.168.137.1", 5000);
             BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
             PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+            out.println("GET_HISTORY");
             String line;
             while (!(line = in.readLine()).equals("null")) {
                 System.out.println(line);
@@ -547,9 +567,10 @@ public class Home extends JFrame {
 
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    Socket soc = new Socket("192.168.137.1", 1986);
+                    Socket soc = new Socket("192.168.137.1", 5000);
                     BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
                     PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+                    out.println("GET_HISTORY");
                     int i = historyOfPatientDefaultTableModel.getRowCount();
                     for (int j = 0; j < i; j++) {
                         historyOfPatientDefaultTableModel.removeRow(0);
@@ -596,7 +617,7 @@ public class Home extends JFrame {
                 updateBloodGroupLabel, updateAddressLabel, updateMajorDiseaseLabel;
         JTextField updatePatientIDTextField, updateNameTextField, updateContactNumberTextField, updateAgeTextField;
         JTextArea updateAddressTextArea, updateMajorDiseaseTextArea;
-        JButton updatePatientRecord_UpdateButton, updatePatientRecord_CloseButton;
+        JButton updatePatientRecord_UpdateButton, updatePatientRecord_CloseButton, update_searchButton;
         ButtonGroup updateGenderButtonGroup = new ButtonGroup();
         JRadioButton updateGenderMaleRadioButton, updateGenderFemaleRadioButton, updateGenderOtherRadioButton,
                 updateGenderUnselectedRadioButton;
@@ -704,6 +725,63 @@ public class Home extends JFrame {
         jsp.setBounds(130, 290, 221, 90);
         updatePatientRecord.add(jsp);
 
+        update_searchButton = new JButton("Search");
+        update_searchButton.setFont(new Font("Poppins", 0, 12));
+        update_searchButton.setBounds(420, 40, 72, 26);
+        updatePatientRecord.add(update_searchButton);
+        update_searchButton.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                String patientIDTextField_Data = updatePatientIDTextField.getText();
+                try {
+                    Socket soc = new Socket("192.168.137.1", 5000);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
+                    PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
+
+                    out.println("UPDATE_PATIENT");
+                    out.println("FETCH");
+                    out.println(updatePatientIDTextField.getText());
+
+                    String response = in.readLine();
+
+                    if ("NOT_FOUND".equals(response)) {
+                        JOptionPane.showMessageDialog(null, "Patient not found!");
+                        return;
+                    }
+
+                    updateNameTextField.setText(response);
+                    updateContactNumberTextField.setText(in.readLine());
+                    updateAgeTextField.setText(in.readLine());
+
+                    String gender = in.readLine();
+                    if ("Male".equals(gender))
+                        updateGenderMaleRadioButton.setSelected(true);
+                    else if ("Female".equals(gender))
+                        updateGenderFemaleRadioButton.setSelected(true);
+                    else if ("Other".equals(gender))
+                        updateGenderOtherRadioButton.setSelected(true);
+                    else if ("Unselect".equals(gender))
+                        updateGenderUnselectedRadioButton.setSelected(true);
+
+                    String bloodGroupFromServer = in.readLine();
+
+                    for (int i = 0; i < updateBloodGroupList.getItemCount(); i++) {
+                        String item = updateBloodGroupList.getItemAt(i).toString();
+
+                        if (item.trim().equalsIgnoreCase(bloodGroupFromServer.trim())) {
+                            updateBloodGroupList.setSelectedIndex(i);
+                            break;
+                        }
+                    }
+
+                    updateAddressTextArea.setText(in.readLine());
+                    updateMajorDiseaseTextArea.setText(in.readLine());
+
+                } catch (IOException ex) {
+                    Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
         updatePatientRecord_UpdateButton = new JButton("Update");
         updatePatientRecord_UpdateButton.setFont(new Font("Poppins", 0, 12)); // NOI18N
         updatePatientRecord_UpdateButton.setBounds(30, 380, 72, 26);
@@ -720,22 +798,35 @@ public class Home extends JFrame {
                     updateGenderButtonGroup_Data = updateGenderFemaleRadioButton.getText();
                 } else if (updateGenderOtherRadioButton.isSelected()) {
                     updateGenderButtonGroup_Data = updateGenderOtherRadioButton.getText();
+                } else if (updateGenderUnselectedRadioButton.isSelected()) {
+                    updateGenderButtonGroup_Data = updateGenderUnselectedRadioButton.getText();
                 }
                 updateBloodGroupList_Data = (String) updateBloodGroupList.getSelectedItem();
                 updateAddressTextArea_Data = updateAddressTextArea.getText();
                 updateMajorDiseaseTextArea_Data = updateMajorDiseaseTextArea.getText();
                 try {
-                    Socket soc = new Socket("192.168.137.1", 1945);
+                    Socket soc = new Socket("192.168.137.1", 5000);
                     BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
                     PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-                    out.println(updatePatientIDTextField_Data);
-                    out.println(updateNameTextField_Data);
-                    out.println(updateContactNumberTextField_Data);
-                    out.println(updateAgeTextField_Data);
+
+                    out.println("UPDATE_PATIENT");
+                    out.println("UPDATE");
+
+                    out.println(updatePatientIDTextField.getText());
+                    out.println(updateNameTextField.getText());
+                    out.println(updateContactNumberTextField.getText());
+                    out.println(updateAgeTextField.getText());
                     out.println(updateGenderButtonGroup_Data);
-                    out.println(updateBloodGroupList_Data);
-                    out.println(updateAddressTextArea_Data);
-                    out.println(updateMajorDiseaseTextArea_Data);
+                    out.println(updateBloodGroupList.getSelectedItem().toString());
+                    out.println(updateAddressTextArea.getText());
+                    out.println(updateMajorDiseaseTextArea.getText());
+
+                    String response = in.readLine();
+
+                    if ("UPDATED".equals(response)) {
+                        JOptionPane.showMessageDialog(null, "Patient updated successfully!");
+                    }
+
                 } catch (IOException ex) {
                     Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -797,8 +888,8 @@ public class Home extends JFrame {
                 lf.setSize(560, 500);
                 lf.setResizable(false);
                 lf.setLocationRelativeTo(null);
-                Image icon = Toolkit.getDefaultToolkit().getImage("logo.png");
-                lf.setIconImage(icon);
+                // Image icon = Toolkit.getDefaultToolkit().getImage("logo.png");
+                // lf.setIconImage(icon);
                 lf.setVisible(true);
             }
         });
